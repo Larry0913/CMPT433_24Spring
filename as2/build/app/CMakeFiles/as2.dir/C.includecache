@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../app/include/periodTimer.h
+
+../hal/include/light_sampler.h
+
+/home/lingjie/cmpt433/work/as2/app/src/main.c
+stdio.h
+-
+stdlib.h
+-
+light_sampler.h
+/home/lingjie/cmpt433/work/as2/app/src/light_sampler.h
+periodTimer.h
+/home/lingjie/cmpt433/work/as2/app/src/periodTimer.h
+
