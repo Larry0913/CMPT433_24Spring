@@ -37,31 +37,31 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 7,
-				"parent" : 2
-			},
-			{
-				"command" : 1,
-				"file" : 1,
 				"line" : 8,
 				"parent" : 2
 			},
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 12,
+				"line" : 9,
 				"parent" : 2
 			},
 			{
-				"command" : 2,
+				"command" : 1,
 				"file" : 1,
-				"line" : 15,
+				"line" : 13,
 				"parent" : 2
 			},
 			{
 				"command" : 2,
 				"file" : 1,
 				"line" : 16,
+				"parent" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 17,
 				"parent" : 2
 			},
 			{
@@ -83,10 +83,6 @@
 				{
 					"backtrace" : 3,
 					"fragment" : "-Wall"
-				},
-				{
-					"backtrace" : 3,
-					"fragment" : "-Werror"
 				},
 				{
 					"backtrace" : 3,

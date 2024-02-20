@@ -1,18 +1,18 @@
 #include <stdlib.h>
-#include <stdbool.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-#include "light_sampler.h"
 #include "periodTimer.h"
+#include "light_sampler.h"
 
 static pthread_t sampling_id;
 pthread_mutex_t historyMutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t getterMutex = PTHREAD_MUTEX_INITIALIZER;
 
-bool running_flag = 1;
+int running_flag = 1;
 static double currentAverage = 0;
-static double* history;
+static double history[BUFFER_MAX_SIZE];
 static int historyCount = 0;
-static int sampleCount = 0;
 static int totalCount = 0;
 
 double getLightLevelVoltage1();
@@ -28,26 +28,40 @@ static void sleepForMs(long long delayInMs);
 void Sampler_init(void)
 {
     pthread_create(&sampling_id, NULL, lightSamplerThread, NULL);
+    pthread_join(sampling_id, NULL);
 }
+    
 
 void Sampler_cleanup(void)
 {
     running_flag = 0;
-    pthread_join(sampling_id, NULL);
 }
 
 // Must be called once every 1s.
 // Moves the samples that it has been collecting this second into
 // the history, which makes the samples available for reads (below).
-void Sampler_moveCurrentDataToHistory(void)
+void Sampler_moveCurrentDataToHistory(int *buffer_index, double *buffer)
 {
+    pthread_mutex_lock(&historyMutex);    
+    {
+        memset(history, 0, BUFFER_MAX_SIZE * sizeof(double)); 
+        historyCount = *buffer_index; // Reset sample count for the next second
+        memcpy(history, buffer, *buffer_index * sizeof(double));
+        buffer_index = 0; // Reset buffer index, logically clearing the buffer for the next second
+        memset(buffer, 0, BUFFER_MAX_SIZE * sizeof(double));
+        
+    }
+    pthread_mutex_unlock(&historyMutex);
 
 }
 
 // Get the number of samples collected during the previous complete second.
 int Sampler_getHistorySize(void)
 {
-
+    pthread_mutex_lock(&historyMutex);
+    int size = historyCount;
+    pthread_mutex_unlock(&historyMutex);
+    return size;
 }
 
 // Get a copy of the samples in the sample history.
@@ -57,10 +71,12 @@ int Sampler_getHistorySize(void)
 // Note: It provides both data and size to ensure consistency.
 double* Sampler_getHistory(int *size)
 {
-    double* ret;
     pthread_mutex_lock(&historyMutex);
-    {
-        ret = history;
+    *size = historyCount;
+    double* ret = (double *)malloc(*size * sizeof(double));
+    if (ret != NULL) 
+    { 
+        memcpy(ret, history, *size * sizeof(double));
     }
     pthread_mutex_unlock(&historyMutex);
     return ret;
@@ -69,15 +85,18 @@ double* Sampler_getHistory(int *size)
 // Get the average light level (not tied to the history).
 double Sampler_getAverageReading(void)
 {
-
+    pthread_mutex_lock(&getterMutex);
+    double avg = currentAverage;
+    pthread_mutex_unlock(&getterMutex);
+    return avg;
 }
 
 // Get the total number of light level samples taken so far.
 long long Sampler_getNumSamplesTaken(void)
 {
-    pthread_mutex_lock(&historyMutex);
+    pthread_mutex_lock(&getterMutex);
     long long buffer = historyCount;
-    pthread_mutex_unlock(&historyMutex);
+    pthread_mutex_unlock(&getterMutex);
 
     return buffer;
 }
@@ -87,54 +106,53 @@ void *lightSamplerThread()
     int cur_reading1 = getVoltage1Reading();
     double voltage = getLightLevelVoltage1(cur_reading1); 
     //set average as first reading when first run
-    if (sampleCount == 0)
+    if (totalCount == 0)
     {
         currentAverage = voltage;
     }
 
     int buffer_index = 0;
-    double * buffer = malloc(INITIAL_BUFFER_SIZE * sizeof(double));
-
-    int flag = 1;
+    //double * buffer = malloc(INITIAL_BUFFER_SIZE * sizeof(double));
+    double buffer[BUFFER_MAX_SIZE];
     long long startTime = getTimeInMs();
     
     while(running_flag)
     {
-        if (flag == 0)
-        {
-            startTime = getTimeInMs();
-        }
-
         cur_reading1 = getVoltage1Reading();
         voltage = getLightLevelVoltage1(cur_reading1);
-        Period_markEvent(PERIOD_EVENT_SAMPLE_LIGHT);
+        //Period_markEvent(PERIOD_EVENT_SAMPLE_LIGHT);
 
-        if (buffer_index < INITIAL_BUFFER_SIZE) 
+        if (buffer_index < BUFFER_MAX_SIZE) 
         {
-            buffer[buffer_index] = voltage; 
+            buffer[buffer_index++] = voltage; 
+            totalCount++;
+            sleepForMs(1);
         }
-        buffer_index++;
 
-        if(getTimeInMs() - startTime < 1000)
+        if(getTimeInMs() - startTime >= 1000)
         {
-            pthread_mutex_lock(&historyMutex);    
+            printf("total count is %d\n", totalCount);
+            printf("current buffer size is %d\n", buffer_index);
+            for (int i = 0; i < 10; i++)
             {
-                memset(history, 0, historyCount); 
-                historyCount = buffer_index;// Reset sample count for the next second
-                memcpy(history, buffer, historyCount * sizeof(double));
-                historyCount = 0;
-                buffer_index = 0; // Reset buffer index, logically clearing the buffer for the next second
-                memset(buffer, 0, INITIAL_BUFFER_SIZE); 
-           
-                // Optionally, physically clear buffer if necessary for your application
+                printf("current value %d is %f\n", i, buffer[i]);
             }
-            pthread_mutex_unlock(&historyMutex);
+
+            Sampler_moveCurrentDataToHistory(&buffer_index, buffer);
+            startTime = getTimeInMs(); 
+
+            printf("current history size is %d\n", historyCount);
+            for (int i = 0; i < 10; i++)
+            {
+                printf("history %d is %f\n", i, history[i]);
+            }
+            printf("\n");
 
         }
 
     }
 
-    currentAverage = exponentialSmoothing(currentAverage, voltage, 0.1);
+    //currentAverage = exponentialSmoothing(currentAverage, voltage, 0.1);
 
 
 

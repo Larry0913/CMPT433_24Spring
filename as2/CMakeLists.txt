@@ -4,7 +4,8 @@ project(as2 VERSION 1.0 DESCRIPTION "as2" LANGUAGES C)
 
 # Compiler options (inherited by sub-folders)
 set(CMAKE_C_STANDARD 11)
-add_compile_options(-Wall -Werror -Wpedantic -Wextra)
+#add_compile_options(-Wall -Werror -Wpedantic -Wextra)
+add_compile_options(-Wall -Wpedantic -Wextra)
 add_compile_options(-fdiagnostics-color)
 
 # Enable address sanitizer
@@ -15,7 +16,9 @@ add_link_options(-fsanitize=address)
 include_directories(${PROJECT_SOURCE_DIR}/app/include)
 include_directories(${PROJECT_SOURCE_DIR}/hal/include)
 
+
 # What folders to build
 add_subdirectory(hal)  
 add_subdirectory(app)
+
 

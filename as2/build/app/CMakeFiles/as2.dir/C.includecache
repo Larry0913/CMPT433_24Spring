@@ -9,6 +9,8 @@
 ../app/include/periodTimer.h
 
 ../hal/include/light_sampler.h
+pthread.h
+-
 
 /home/lingjie/cmpt433/work/as2/app/src/main.c
 stdio.h

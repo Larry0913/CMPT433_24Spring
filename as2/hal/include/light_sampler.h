@@ -16,7 +16,7 @@
 #define A2D_FILE_VOLTAGE0 "/sys/bus/iio/devices/iio:device0/in_voltage0_raw"
 #define A2D_VOLTAGE_REF_V 1.8
 #define A2D_MAX_READING 4095
-#define INITIAL_BUFFER_SIZE 1000
+#define BUFFER_MAX_SIZE 1000
 #ifndef _LIGHT_SAMPLER_H_
 #define _LIGHT_SAMPLER_H_
 
@@ -26,7 +26,7 @@ void Sampler_cleanup(void);
 // Must be called once every 1s.
 // Moves the samples that it has been collecting this second into
 // the history, which makes the samples available for reads (below).
-void Sampler_moveCurrentDataToHistory(void);
+void Sampler_moveCurrentDataToHistory(int *buffer_index, double *buffer);
 // Get the number of samples collected during the previous complete second.
 int Sampler_getHistorySize(void);
 // Get a copy of the samples in the sample history.

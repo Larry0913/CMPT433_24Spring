@@ -6,5 +6,5 @@ C_DEFINES =
 
 C_INCLUDES = -I/home/lingjie/cmpt433/work/as2/app/include -I/home/lingjie/cmpt433/work/as2/hal/include -I/home/lingjie/cmpt433/work/as2/hal/hal/include
 
-C_FLAGS = -g -Wall -Werror -Wpedantic -Wextra -fdiagnostics-color -fsanitize=address -std=gnu11
+C_FLAGS = -g -Wall -Wpedantic -Wextra -fdiagnostics-color -fsanitize=address -std=gnu11
 

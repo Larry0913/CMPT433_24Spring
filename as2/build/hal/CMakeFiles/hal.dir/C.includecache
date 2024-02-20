@@ -6,6 +6,8 @@
 
 #IncludeRegexTransform: 
 
+../app/include/periodTimer.h
+
 ../hal/include/light_sampler.h
 pthread.h
 -
@@ -13,10 +15,12 @@ pthread.h
 /home/lingjie/cmpt433/work/as2/hal/src/light_sampler.c
 stdlib.h
 -
-stdbool.h
--
 stdio.h
 -
+stdbool.h
+-
+periodTimer.h
+/home/lingjie/cmpt433/work/as2/hal/src/periodTimer.h
 light_sampler.h
 /home/lingjie/cmpt433/work/as2/hal/src/light_sampler.h
 
