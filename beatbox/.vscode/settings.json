@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stdbool.h": "c",
+        "audiomixer_template.h": "c",
+        "threadcontroller.h": "c",
+        "periodtimer.h": "c",
+        "audiogeneration.h": "c",
+        "accelerometer.h": "c"
+    }
+}

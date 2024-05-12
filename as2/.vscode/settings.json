@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "stdlib.h": "c",
+        "stdbool.h": "c",
+        "string.h": "c",
+        "periodtimer.h": "c",
+        "light_sampler.h": "c",
+        "threadcontrol.h": "c",
+        "pthread.h": "c",
+        "pwm.h": "c"
+    }
+}

@@ -1,0 +1,130 @@
+lingjie@larry-debian:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 00:0c:29:2a:2f:b1 brd ff:ff:ff:ff:ff:ff
+    altname enp2s1
+    inet 192.168.238.128/24 brd 192.168.238.255 scope global dynamic noprefixroute ens33
+       valid_lft 1540sec preferred_lft 1540sec
+    inet6 fe80::20c:29ff:fe2a:2fb1/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+7: enx3ce4b0e06308: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 1000
+    link/ether 3c:e4:b0:e0:63:08 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.7.1/24 brd 192.168.7.255 scope global dynamic noprefixroute enx3ce4b0e06308
+       valid_lft 1145sec preferred_lft 1145sec
+    inet6 fe80::29d9:b1ad:310f:606e/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+8: enx3ce4b0e0630a: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 3c:e4:b0:e0:63:0a brd ff:ff:ff:ff:ff:ff
+    inet 192.168.6.1/24 brd 192.168.6.255 scope global dynamic noprefixroute enx3ce4b0e0630a
+       valid_lft 1146sec preferred_lft 1146sec
+    inet6 fe80::4a25:a880:e960:97d3/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+lingjie@larry-debian:~$ ping 192.168.7.2
+PING 192.168.7.2 (192.168.7.2) 56(84) bytes of data.
+64 bytes from 192.168.7.2: icmp_seq=1 ttl=64 time=0.608 ms
+64 bytes from 192.168.7.2: icmp_seq=2 ttl=64 time=2.01 ms
+64 bytes from 192.168.7.2: icmp_seq=3 ttl=64 time=1.00 ms
+^C
+--- 192.168.7.2 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2028ms
+rtt min/avg/max/mdev = 0.608/1.205/2.005/0.587 ms
+lingjie@larry-debian:~$ ssh debian@192.168.7.2
+Debian GNU/Linux 11
+
+BeagleBoard.org Debian Bullseye Minimal Image 2023-10-07
+Support: https://bbb.io/debian
+default username:password is [debian:temppwd]
+
+debian@192.168.7.2's password: 
+ __      __       .__                                .____    .__                   __.__      ._.
+/  \    /  \ ____ |  |   ____  ____   _____   ____   |    |   |__| ____    ____    |__|__| ____| |
+\   \/\/   // __ \|  | _/ ___\/  _ \ /     \_/ __ \  |    |   |  |/    \  / ___\   |  |  |/ __ \ |
+ \        /\  ___/|  |_\  \__(  <_> )  Y Y  \  ___/  |    |___|  |   |  \/ /_/  >  |  |  \  ___/\|
+  \__/\  /  \___  >____/\___  >____/|__|_|  /\___  > |_______ \__|___|  /\___  /\__|  |__|\___  >_
+       \/       \/          \/            \/     \/          \/       \//_____/\______|       \/\/
+Last login: Fri Jan 26 05:33:11 2024 from 192.168.7.1
+Hello embedded world, from Lingjie Li!
+
+When the LEDs light up, press the joystick in that direction!
+(Press left or right to exit)
+Get ready...
+Press UP now!
+Correct!
+New best time!
+Your reaction time was 682ms; best so far in game is 682ms.
+Get ready...
+Press DOWN now!
+Incorrect!
+Get ready...
+Press UP now!
+Incorrect!
+Get ready...
+Press UP now!
+Correct!
+Your reaction time was 813ms; best so far in game is 682ms.
+Get ready...
+User selected to quit.
+debian@lingjiel-beagle:~$ ./internetToTarget.sh 
+[sudo] password for debian: 
+nameserver 8.8.8.8
+debian@lingjiel-beagle:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN group default qlen 1000
+    link/ether 3c:e4:b0:e0:63:06 brd ff:ff:ff:ff:ff:ff
+3: usb0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 3c:e4:b0:e0:63:09 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.7.2/24 brd 192.168.7.255 scope global usb0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::3ee4:b0ff:fee0:6309/64 scope link 
+       valid_lft forever preferred_lft forever
+4: usb1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 3c:e4:b0:e0:63:0b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.6.2/24 brd 192.168.6.255 scope global usb1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::3ee4:b0ff:fee0:630b/64 scope link 
+       valid_lft forever preferred_lft forever
+5: can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN group default qlen 10
+    link/can 
+6: can1: <NOARP,ECHO> mtu 16 qdisc noop state DOWN group default qlen 10
+    link/can 
+debian@lingjiel-beagle:~$ ping 192.168.7.1
+PING 192.168.7.1 (192.168.7.1) 56(84) bytes of data.
+64 bytes from 192.168.7.1: icmp_seq=1 ttl=64 time=0.936 ms
+64 bytes from 192.168.7.1: icmp_seq=2 ttl=64 time=1.54 ms
+64 bytes from 192.168.7.1: icmp_seq=3 ttl=64 time=0.956 ms
+^C
+--- 192.168.7.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 0.936/1.143/1.537/0.278 ms
+debian@lingjiel-beagle:~$ ping google.ca
+PING google.ca (142.250.217.67) 56(84) bytes of data.
+64 bytes from sea09s29-in-f3.1e100.net (142.250.217.67): icmp_seq=1 ttl=127 time=149 ms
+64 bytes from sea09s29-in-f3.1e100.net (142.250.217.67): icmp_seq=2 ttl=127 time=8.22 ms
+64 bytes from sea09s29-in-f3.1e100.net (142.250.217.67): icmp_seq=3 ttl=127 time=8.07 ms
+64 bytes from sea09s29-in-f3.1e100.net (142.250.217.67): icmp_seq=4 ttl=127 time=8.43 ms
+^C
+--- google.ca ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3006ms
+rtt min/avg/max/mdev = 8.072/43.448/149.074/60.983 ms
+debian@lingjiel-beagle:~$ cat /ID.txt 
+BeagleBoard.org Debian Bullseye Minimal Image 2023-10-07
+debian@lingjiel-beagle:~$ cat /proc/version 
+Linux version 5.10.168-ti-r75 (voodoo@rpi4b4g-02) (gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2) #1bullseye SMP PREEMPT Thu Dec 28 22:52:21 UTC 2023
+debian@lingjiel-beagle:~$ cat /proc/uptime 
+369.22 305.11
+debian@lingjiel-beagle:~$ ./mount.sh 
+debian@lingjiel-beagle:~$ ls /mnt/remote/
+motd  myApps  nfs_message.txt
+debian@lingjiel-beagle:~$ exit
+logout
+Connection to 192.168.7.2 closed.
